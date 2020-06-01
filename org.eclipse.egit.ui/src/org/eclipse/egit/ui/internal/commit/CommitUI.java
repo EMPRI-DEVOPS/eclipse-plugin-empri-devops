@@ -45,6 +45,7 @@ import org.eclipse.egit.core.internal.util.ResourceUtil;
 import org.eclipse.egit.core.op.CommitOperation;
 import org.eclipse.egit.core.project.RepositoryMapping;
 import org.eclipse.egit.ui.Activator;
+import org.eclipse.egit.ui.UIPreferences;
 import org.eclipse.egit.ui.UIUtils;
 import org.eclipse.egit.ui.internal.UIText;
 import org.eclipse.egit.ui.internal.dialogs.BasicConfigurationDialog;
@@ -53,6 +54,7 @@ import org.eclipse.egit.ui.internal.push.PushMode;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.IndexDiff;
 import org.eclipse.jgit.lib.Repository;
@@ -86,6 +88,10 @@ public class CommitUI  {
 
 	private boolean preselectAll;
 
+	private ProvidesCommitDate providesCommitDate;
+
+	private OriginalCommitDateEncoder originalCommitDateEncoder;
+
 	/**
 	 * Constructs a CommitUI object
 	 * @param shell
@@ -110,6 +116,8 @@ public class CommitUI  {
 		System.arraycopy(selectedResources, 0, this.selectedResources, 0,
 				selectedResources.length);
 		this.preselectAll = preselectAll;
+		providesCommitDate = new ProvidesCommitDate();
+		originalCommitDateEncoder = new OriginalCommitDateEncoder();
 	}
 
 	/**
@@ -190,11 +198,21 @@ public class CommitUI  {
 			return false;
 
 		final CommitOperation commitOperation;
+		ProvidesCommitDate.CommitDateResult commitDateResult = providesCommitDate
+				.commitDate();
+		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+		String commitMessage = commitDialog.getCommitMessage();
+		if (preferenceStore.getBoolean(UIPreferences.SAVE_ORIGINAL_COMMIT_DATE)) {
+			commitMessage = originalCommitDateEncoder.encode(
+					commitMessage, commitDateResult.getOriginalCommitDate());
+		}
 		try {
 			commitOperation= new CommitOperation(
 					repo,
 					commitDialog.getSelectedFiles(), notTracked, commitDialog.getAuthor(),
-					commitDialog.getCommitter(), commitDialog.getCommitMessage());
+					commitDialog.getCommitter(),
+					commitMessage,
+					commitDateResult.getCommitDate());
 		} catch (CoreException e1) {
 			Activator.handleError(UIText.CommitUI_commitFailed, e1, true);
 			return false;

@@ -17,11 +17,15 @@
 package org.eclipse.egit.ui.internal.history;
 
 import java.io.IOException;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
+import java.util.TimeZone;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -32,8 +36,11 @@ import org.eclipse.egit.ui.UIPreferences;
 import org.eclipse.egit.ui.internal.CommonUtils;
 import org.eclipse.egit.ui.internal.PreferenceBasedDateFormatter;
 import org.eclipse.egit.ui.internal.UIText;
+import org.eclipse.egit.ui.internal.commit.OriginalCommitDateEncoder;
+import org.eclipse.egit.ui.internal.commit.OriginalCommitDateEncoder.DecodedDates;
 import org.eclipse.egit.ui.internal.history.FormatJob.FormatResult;
 import org.eclipse.egit.ui.internal.trace.GitTraceLocation;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.Region;
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.MissingObjectException;
@@ -68,6 +75,8 @@ public class CommitInfoBuilder {
 
 	private final PreferenceBasedDateFormatter dateFormatter;
 
+	private OriginalCommitDateEncoder originalCommitDateEncoder;
+
 	/**
 	 * @param db the repository
 	 * @param commit the commit the info should be shown for
@@ -81,6 +90,7 @@ public class CommitInfoBuilder {
 		this.fill = fill;
 		this.allRefs = allRefs;
 		this.dateFormatter = PreferenceBasedDateFormatter.create();
+		this.originalCommitDateEncoder = new OriginalCommitDateEncoder();
 	}
 
 	/**
@@ -109,6 +119,34 @@ public class CommitInfoBuilder {
 		addPersonIdent(d, author, UIText.CommitMessageViewer_author);
 		addPersonIdent(d, committer, UIText.CommitMessageViewer_committer);
 
+		String msg = commit.getFullMessage().trim();
+		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+
+		if (preferenceStore.getBoolean(
+				UIPreferences.GIT_PRIVACY_COMMIT_MESSAGE_ORIGINAL_DATE)) {
+			Optional<DecodedDates> originalCommitDates = originalCommitDateEncoder
+					.decode(msg);
+			if (originalCommitDates.isPresent()) {
+				ZonedDateTime committedDateTime = originalCommitDates.get()
+						.getCommittedDateTime();
+				d.append(UIText.GitPrivacy_original_committed_date);
+				d.append(": "); //$NON-NLS-1$
+				Date date = Date.from(committedDateTime.toInstant());
+				d.append(dateFormatter.formatDate(date,
+						TimeZone.getTimeZone(committedDateTime.getZone())));
+				d.append(LF);
+
+				ZonedDateTime authoredDateTime = originalCommitDates.get()
+						.getAuthoredDateTime();
+				d.append(UIText.GitPrivacy_original_authored_date);
+				d.append(": "); //$NON-NLS-1$
+				date = Date.from(authoredDateTime.toInstant());
+				d.append(dateFormatter.formatDate(date,
+						TimeZone.getTimeZone(authoredDateTime.getZone())));
+				d.append(LF);
+			}
+		}
+
 		for (int i = 0; i < commit.getParentCount(); i++) {
 			addCommit(d, (SWTCommit) commit.getParent(i),
 					UIText.CommitMessageViewer_parent, hyperlinks);
@@ -119,7 +157,7 @@ public class CommitInfoBuilder {
 					UIText.CommitMessageViewer_child, hyperlinks);
 		}
 
-		if(Activator.getDefault().getPreferenceStore().getBoolean(
+		if(preferenceStore.getBoolean(
 				UIPreferences.HISTORY_SHOW_BRANCH_SEQUENCE)) {
 			try (RevWalk rw = new RevWalk(db)) {
 				List<Ref> branches = getBranches(commit, allRefs, db, monitor);
@@ -158,7 +196,7 @@ public class CommitInfoBuilder {
 			d.append(LF);
 		}
 
-		if (Activator.getDefault().getPreferenceStore().getBoolean(
+		if (preferenceStore.getBoolean(
 				UIPreferences.HISTORY_SHOW_TAG_SEQUENCE)) {
 			try (RevWalk rw = new RevWalk(db)) {
 				monitor.setTaskName(UIText.CommitMessageViewer_GettingPreviousTagTaskName);
@@ -179,7 +217,6 @@ public class CommitInfoBuilder {
 
 		d.append(LF);
 		int headerEnd = d.length();
-		String msg = commit.getFullMessage().trim();
 		// Find start of footer:
 		int footerStart = CommonUtils.getFooterOffset(msg);
 		if (footerStart >= 0) {

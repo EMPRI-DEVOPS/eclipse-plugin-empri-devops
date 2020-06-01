@@ -4864,6 +4864,12 @@ public class UIText extends NLS {
 	public static String CommitGraphTable_committerDateColumn;
 
 	/** */
+	public static String CommitGraphTable_originalCommittedDateColumn;
+
+	/** */
+	public static String CommitGraphTable_originalAuthoredDateColumn;
+
+	/** */
 	public static String CommitGraphTable_CompareWithEachOtherInTreeMenuLabel;
 
 	/** */
@@ -6047,6 +6053,71 @@ public class UIText extends NLS {
 
 	/** */
 	public static String EditableRevision_CannotSave;
+
+	/** */
+	public static String PrivacyPreferencePage_git_privacy_redating_group;
+
+	/** */
+	public static String PrivacyPreferencePage_git_privacy_encryption_group;
+
+	/** */
+	public static String PrivacyPreferencePage_git_privacy_decryption_group;
+
+	/** */
+	public static String PrivacyPreferencePage_limit_commit_time;
+
+	/** */
+	public static String PrivacyPreferencePage_lower_commit_time_limit;
+
+	/** */
+	public static String PrivacyPreferencePage_upper_commit_time_limit;
+
+	/** */
+	public static Object PrivacyPreferencePage_limit_commit_time_error_message;
+
+	/** */
+	public static String PrivacyPreferencePage_password_empty_error_message;
+
+	/** */
+	public static String PrivacyPreferencePage_modify_commit_date;
+
+	/** */
+	public static String PrivacyPreferencePage_modify_commit_month;
+
+	/** */
+	public static String PrivacyPreferencePage_modify_commit_day;
+
+	/** */
+	public static String PrivacyPreferencePage_modify_commit_hour;
+
+	/** */
+	public static String PrivacyPreferencePage_modify_commit_minute;
+
+	/** */
+	public static String PrivacyPreferencePage_modify_commit_second;
+
+	/** */
+	public static String PrivacyPreferencePage_save_original_commit_date;
+
+	/** */
+	public static String PrivacyPreferencePage_git_privacy_password;
+
+	/** */
+	public static String PrivacyPreferencePage_git_privacy_password_salt;
+
+	/** */
+	public static String PrivacyPreferencePage_show_original_commit_date_in_history_view;
+
+	/** */
+	public static String PrivacyPreferencePage_show_original_commit_date_in_commit_message;
+
+	/** */
+	public static String GitPrivacy_original_committed_date;
+
+	/** */
+	public static Object GitPrivacy_original_authored_date;
+
+
 
 	static {
 		initializeMessages(BUNDLE_NAME, UIText.class);

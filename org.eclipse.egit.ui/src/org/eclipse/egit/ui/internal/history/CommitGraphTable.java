@@ -131,11 +131,11 @@ class CommitGraphTable {
 
 	private final CommitGraphTableLayout tableLayout;
 
-	private final ColumnLayoutData[] columnLayouts = new ColumnLayoutData[6];
+	private final ColumnLayoutData[] columnLayouts = new ColumnLayoutData[8];
 
-	private final ColumnLayoutData[] baseLayouts = new ColumnLayoutData[6];
+	private final ColumnLayoutData[] baseLayouts = new ColumnLayoutData[8];
 
-	private final ColumnLayoutData[] defaultLayouts = new ColumnLayoutData[6];
+	private final ColumnLayoutData[] defaultLayouts = new ColumnLayoutData[8];
 
 	private Clipboard clipboard;
 
@@ -225,6 +225,8 @@ class CommitGraphTable {
 						|| UIPreferences.HISTORY_COLUMN_COMMITTER
 								.equals(property)
 						|| UIPreferences.HISTORY_COLUMN_COMMITTER_DATE
+								.equals(property)
+						|| UIPreferences.GIT_PRIVACY_HISTORY_COLUMN_ORIGINAL_DATE
 								.equals(property)) {
 					rawTable.getDisplay().asyncExec(() -> {
 						if (!rawTable.isDisposed()) {
@@ -542,6 +544,20 @@ class CommitGraphTable {
 		committerDate.setWidth(100);
 		columnLayouts[5] = new ColumnWeightData(5, 80, true);
 		tableLayout.setColumnData(committerDate, columnLayouts[5]);
+
+		final TableColumn originalCommittedDate = new TableColumn(rawTable, SWT.NONE);
+		originalCommittedDate.setResizable(true);
+		originalCommittedDate.setText(UIText.CommitGraphTable_originalCommittedDateColumn);
+		originalCommittedDate.setWidth(100);
+		columnLayouts[6] = new ColumnWeightData(5, 80, true);
+		tableLayout.setColumnData(originalCommittedDate, columnLayouts[6]);
+
+		final TableColumn originalAuthoredDate = new TableColumn(rawTable, SWT.NONE);
+		originalAuthoredDate.setResizable(true);
+		originalAuthoredDate.setText(UIText.CommitGraphTable_originalAuthoredDateColumn);
+		originalAuthoredDate.setWidth(100);
+		columnLayouts[7] = new ColumnWeightData(5, 80, true);
+		tableLayout.setColumnData(originalAuthoredDate, columnLayouts[7]);
 	}
 
 	private void createPaintListener(final Table rawTable) {
@@ -670,6 +686,10 @@ class CommitGraphTable {
 				store.getBoolean(UIPreferences.HISTORY_COLUMN_COMMITTER));
 		setColumn(rawTable.getColumn(5), 5,
 				store.getBoolean(UIPreferences.HISTORY_COLUMN_COMMITTER_DATE));
+		setColumn(rawTable.getColumn(6), 6,
+				store.getBoolean(UIPreferences.GIT_PRIVACY_HISTORY_COLUMN_ORIGINAL_DATE));
+		setColumn(rawTable.getColumn(7), 7,
+				store.getBoolean(UIPreferences.GIT_PRIVACY_HISTORY_COLUMN_ORIGINAL_DATE));
 	}
 
 	private static class CommitGraphTableLayout extends TableColumnLayout {

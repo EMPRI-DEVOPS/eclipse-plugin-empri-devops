@@ -15,10 +15,18 @@
  *******************************************************************************/
 package org.eclipse.egit.ui.internal.dialogs;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Date;
+import java.util.Optional;
+import java.util.TimeZone;
+
 import org.eclipse.egit.core.internal.Utils;
 import org.eclipse.egit.ui.Activator;
 import org.eclipse.egit.ui.UIPreferences;
 import org.eclipse.egit.ui.internal.PreferenceBasedDateFormatter;
+import org.eclipse.egit.ui.internal.commit.OriginalCommitDateEncoder;
+import org.eclipse.egit.ui.internal.commit.OriginalCommitDateEncoder.DecodedDates;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
@@ -28,6 +36,7 @@ import org.eclipse.jface.viewers.LabelProviderChangedEvent;
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.util.GitDateFormatter;
+import org.eclipse.jgit.util.RelativeDateFormatter;
 import org.eclipse.swt.graphics.Image;
 
 /**
@@ -48,6 +57,8 @@ public class CommitLabelProvider extends BaseLabelProvider implements
 	private IPropertyChangeListener uiPrefsListener;
 
 	private final IPreferenceStore store;
+
+	private OriginalCommitDateEncoder commitMessageEncoder = new OriginalCommitDateEncoder();
 
 	/**
 	 * Default constructor
@@ -139,8 +150,43 @@ public class CommitLabelProvider extends BaseLabelProvider implements
 					return getDateFormatter().formatDate(committer);
 				}
 		}
+		if (columnIndex == 6 || columnIndex == 7) {
+			Optional<DecodedDates> datesOptional = commitMessageEncoder
+					.decode(c.getFullMessage());
+			if (datesOptional.isPresent()) {
+				ZonedDateTime committedDateTime = getDateTime(columnIndex,
+						datesOptional);
+				Date date = Date.from(committedDateTime.toInstant());
+				// TODO(FAP): this whole logic depends on internals of
+				// #setRelativeDate, better to change the formatter.
+				// Also gets duplicated in CommitInfoBuilder
+				if (dateFormatter instanceof PreferenceBasedDateFormatter) {
+					PreferenceBasedDateFormatter formatter = (PreferenceBasedDateFormatter) dateFormatter;
+					ZoneId zone = committedDateTime.getZone();
+					return formatter
+							.formatDate(
+									date,
+							TimeZone.getTimeZone(zone));
+				} else {
+					return RelativeDateFormatter.format(date);
+				}
+			}
+		}
 
 		return ""; //$NON-NLS-1$
+	}
+
+	private ZonedDateTime getDateTime(final int columnIndex,
+			Optional<DecodedDates> datesOptional) {
+		ZonedDateTime committedDateTime = null;
+		switch (columnIndex) {
+		case 6:
+			committedDateTime = datesOptional.get().getCommittedDateTime();
+			break;
+		case 7:
+			committedDateTime = datesOptional.get().getAuthoredDateTime();
+		}
+		return committedDateTime;
 	}
 
 	private GitDateFormatter getDateFormatter() {

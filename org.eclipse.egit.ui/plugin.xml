@@ -531,6 +531,15 @@
       </page>
       <page
             category="org.eclipse.egit.ui.GitPreferences"
+            class="org.eclipse.egit.ui.internal.preferences.PrivacyPreferencePage"
+            id="org.eclipse.egit.ui.internal.preferences.PrivacyPreferencePage"
+            name="%GitPreferences_PrivacyPreferencePage_name">
+         <keywordReference
+               id="org.eclipse.egit.ui.internal.preferences.PrivacyPreferencePage">
+         </keywordReference>
+      </page>
+      <page
+            category="org.eclipse.egit.ui.GitPreferences"
             class="org.eclipse.egit.ui.internal.preferences.StagingViewPreferencePage"
             id="org.eclipse.egit.ui.internal.preferences.StagingViewPreferencePage"
             name="%GitPreferences_StagingViewPreferencePage_name">
@@ -636,6 +645,10 @@
       <keyword
             id="org.eclipse.egit.ui.internal.preferences.CommittingPreferencePage"
             label="%CommittingPreferencePage_keywords">
+      </keyword>
+      <keyword
+            id="org.eclipse.egit.ui.internal.preferences.PrivacyPreferencePage"
+            label="%PrivacyPreferencePage_keywords">
       </keyword>
       <keyword
             id="org.eclipse.egit.ui.internal.preferences.StagingViewPreferencePage"

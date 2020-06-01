@@ -132,7 +132,9 @@ class CommitMessageViewer extends HyperlinkSourceViewer {
 					|| UIPreferences.HISTORY_SHOW_BRANCH_SEQUENCE
 							.equals(property)
 					|| UIPreferences.DATE_FORMAT.equals(property)
-					|| UIPreferences.DATE_FORMAT_CHOICE.equals(property)) {
+					|| UIPreferences.DATE_FORMAT_CHOICE.equals(property)
+					|| UIPreferences.GIT_PRIVACY_COMMIT_MESSAGE_ORIGINAL_DATE
+							.equals(property)) {
 				format();
 			}
 		};

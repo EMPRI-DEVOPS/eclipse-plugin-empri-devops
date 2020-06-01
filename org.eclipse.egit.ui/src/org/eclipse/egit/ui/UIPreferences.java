@@ -297,6 +297,48 @@ public class UIPreferences {
 	/** */
 	public static final String STASH_INCLUDE_UNTRACKED = "stashIncludeUntracked"; //$NON-NLS-1$
 
+	/** */
+	public static final String MODIFY_COMMIT_DATE = "modifyCommitState"; //$NON-NLS-1$
+
+	/** */
+	public static final String MODIFY_COMMIT_MONTH = "modifyCommitMonth"; //$NON-NLS-1$
+
+	/** */
+	public static final String MODIFY_COMMIT_DAY = "modifyCommitDay	"; //$NON-NLS-1$
+
+	/** */
+	public static final String MODIFY_COMMIT_HOUR = "modifyCommitHour"; //$NON-NLS-1$
+
+	/** */
+	public static final String MODIFY_COMMIT_MINUTE = "modifyCommitMinute"; //$NON-NLS-1$
+
+	/** */
+	public static final String MODIFY_COMMIT_SECOND = "modifyCommitSecond"; //$NON-NLS-1$
+
+	/** */
+	public static final String LIMIT_COMMIT_TIME = "limitCommitTime"; //$NON-NLS-1$
+
+	/** */
+	public static final String LOWER_COMMIT_TIME_LIMIT = "lowerCommitTimeLimit"; //$NON-NLS-1$
+
+	/** */
+	public static final String UPPER_COMMIT_TIME_LIMIT = "upperCommitTimeLimit"; //$NON-NLS-1$
+
+	/** */
+	public static final String SAVE_ORIGINAL_COMMIT_DATE = "saveOriginalCommitDate"; //$NON-NLS-1$
+
+	/** */
+	public static final String GIT_PRIVACY_PASSWORD = "gitPrivacyPassword"; //$NON-NLS-1$
+
+	/** */
+	public static final String GIT_PRIVACY_PASSWORD_SALT = "gitPrivacyPasswordSalt"; //$NON-NLS-1$
+
+	/** */
+	public static final String GIT_PRIVACY_HISTORY_COLUMN_ORIGINAL_DATE = "gitPrivacyHistoryColumnOriginalDate"; //$NON-NLS-1$
+
+	/** */
+	public static final String GIT_PRIVACY_COMMIT_MESSAGE_ORIGINAL_DATE = "gitPrivacyCommitMessageOriginalDate"; //$NON-NLS-1$
+
 	/**
 	 * Converts a persisted String separated with commas to an integer array
 	 *

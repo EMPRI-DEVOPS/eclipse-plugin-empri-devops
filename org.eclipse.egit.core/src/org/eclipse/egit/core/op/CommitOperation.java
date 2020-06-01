@@ -88,6 +88,8 @@ public class CommitOperation implements IEGitOperation {
 
 	RevCommit commit = null;
 
+	private Date commitDate;
+
 	/**
 	 * @param filesToCommit
 	 *            a list of files which will be included in the commit
@@ -102,7 +104,8 @@ public class CommitOperation implements IEGitOperation {
 	 * @throws CoreException
 	 */
 	public CommitOperation(IFile[] filesToCommit, Collection<IFile> notTracked,
-			String author, String committer, String message) throws CoreException {
+			String author, String committer, String message)
+			throws CoreException {
 		this.author = author;
 		this.committer = committer;
 		this.message = stripLeadingWhitespace(message);
@@ -126,13 +129,17 @@ public class CommitOperation implements IEGitOperation {
 	 *            the committer of the commit
 	 * @param message
 	 *            the commit message
+	 * @param commitDate
+	 *            the commit date
 	 * @throws CoreException
 	 */
 	public CommitOperation(Repository repository, Collection<String> filesToCommit, Collection<String> notTracked,
-			String author, String committer, String message) throws CoreException {
+			String author, String committer, String message, Date commitDate)
+			throws CoreException {
 		this.repo = repository;
 		this.author = author;
 		this.committer = committer;
+		this.commitDate = commitDate;
 		this.message = stripLeadingWhitespace(message);
 		if (filesToCommit != null)
 			commitFileList = new HashSet<>(filesToCommit);
@@ -142,19 +149,22 @@ public class CommitOperation implements IEGitOperation {
 
 	/**
 	 * Constructs a CommitOperation that commits the index
+	 *
 	 * @param repository
 	 * @param author
 	 * @param committer
 	 * @param message
+	 * @param commitDate
 	 * @throws CoreException
 	 */
 	public CommitOperation(Repository repository, String author, String committer,
-			String message) throws CoreException {
+			String message, Date commitDate) throws CoreException {
 		this.repo = repository;
 		this.author = author;
 		this.committer = committer;
 		this.message = stripLeadingWhitespace(message);
 		this.commitIndex = true;
+		this.commitDate = commitDate;
 	}
 
 	private String stripLeadingWhitespace(String text) {
@@ -313,7 +323,6 @@ public class CommitOperation implements IEGitOperation {
 	}
 
 	private void setAuthorAndCommitter(CommitCommand commitCommand) throws TeamException {
-		final Date commitDate = new Date();
 		final TimeZone timeZone = TimeZone.getDefault();
 
 		final PersonIdent enteredAuthor = RawParseUtils.parsePersonIdent(author);

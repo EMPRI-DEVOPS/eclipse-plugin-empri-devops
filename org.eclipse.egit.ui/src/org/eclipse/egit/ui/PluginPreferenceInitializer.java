@@ -165,6 +165,12 @@ public class PluginPreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(UIPreferences.HISTORY_COLUMN_AUTHOR_DATE, true);
 		store.setDefault(UIPreferences.HISTORY_COLUMN_COMMITTER, true);
 		store.setDefault(UIPreferences.HISTORY_COLUMN_COMMITTER_DATE, true);
+
+		store.setDefault(UIPreferences.MODIFY_COMMIT_HOUR, true);
+		store.setDefault(UIPreferences.MODIFY_COMMIT_MINUTE, true);
+		store.setDefault(UIPreferences.MODIFY_COMMIT_SECOND, true);
+		store.setDefault(UIPreferences.LOWER_COMMIT_TIME_LIMIT, 9);
+		store.setDefault(UIPreferences.UPPER_COMMIT_TIME_LIMIT, 17);
 	}
 
 }

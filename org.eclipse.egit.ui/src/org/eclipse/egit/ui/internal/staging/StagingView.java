@@ -96,6 +96,8 @@ import org.eclipse.egit.ui.internal.commit.CommitJob;
 import org.eclipse.egit.ui.internal.commit.CommitMessageHistory;
 import org.eclipse.egit.ui.internal.commit.CommitProposalProcessor;
 import org.eclipse.egit.ui.internal.commit.DiffViewer;
+import org.eclipse.egit.ui.internal.commit.OriginalCommitDateEncoder;
+import org.eclipse.egit.ui.internal.commit.ProvidesCommitDate;
 import org.eclipse.egit.ui.internal.components.DropDownMenuAction;
 import org.eclipse.egit.ui.internal.components.PartVisibilityListener;
 import org.eclipse.egit.ui.internal.components.RepositoryMenuUtil.RepositoryToolbarAction;
@@ -365,6 +367,9 @@ public class StagingView extends ViewPart
 	private boolean isUnbornHead;
 
 	private String currentBranch;
+
+	private IPreferenceStore preferenceStore = Activator.getDefault()
+			.getPreferenceStore();
 
 	/**
 	 * Presentation mode of the staged/unstaged files.
@@ -724,6 +729,10 @@ public class StagingView extends ViewPart
 			JFaceResources.getResources());
 
 	private boolean disposed;
+
+	private OriginalCommitDateEncoder originalCommitDateEncoder = new OriginalCommitDateEncoder();
+
+	private ProvidesCommitDate providesCommitDate = new ProvidesCommitDate();
 
 	private Image getImage(ImageDescriptor descriptor) {
 		return (Image) this.resources.get(descriptor);
@@ -4332,13 +4341,20 @@ public class StagingView extends ViewPart
 			return false;
 		}
 
+		ProvidesCommitDate.CommitDateResult commitDateResult = providesCommitDate
+				.commitDate();
 		String commitMessage = commitMessageComponent.getCommitMessage();
+		if (preferenceStore.getBoolean(UIPreferences.SAVE_ORIGINAL_COMMIT_DATE)) {
+			commitMessage = originalCommitDateEncoder.encode(commitMessage,
+					commitDateResult.getOriginalCommitDate());
+		}
 		CommitOperation commitOperation = null;
 		try {
 			commitOperation = new CommitOperation(currentRepository,
 					commitMessageComponent.getAuthor(),
 					commitMessageComponent.getCommitter(),
-					commitMessage);
+					commitMessage,
+					commitDateResult.getCommitDate());
 		} catch (CoreException e) {
 			Activator.handleError(UIText.StagingView_commitFailed, e, true);
 			return false;

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/egit_featurepatch_6.0.0.jar" id="egit_featurepatch" version="6.0.0" patch="true">
+      <category name="new_category_1"/>
+   </feature>
+   <category-def name="new_category_1" label="New Category 1"/>
+</site>

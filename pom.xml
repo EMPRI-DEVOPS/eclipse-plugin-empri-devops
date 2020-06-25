@@ -65,7 +65,7 @@
     <tycho-extras-version>${tycho-version}</tycho-extras-version>
     <jboss-tycho-plugins-version>1.5.1</jboss-tycho-plugins-version>
     <spotbugs-maven-plugin-version>3.1.12</spotbugs-maven-plugin-version>
-    <jgit-site>file:/${basedir}/../../jgit/org.eclipse.jgit.packaging/org.eclipse.jgit.repository/target/repository</jgit-site>
+    <jgit-site>https://download.eclipse.org/egit/updates/</jgit-site>
     <license-site>https://download.eclipse.org/cbi/updates/license</license-site>
     <signer-input-directory>/home/data/httpd/download-staging.priv/egit</signer-input-directory>
     <download-publish-path>/home/data/httpd/download.eclipse.org/egit/updates-nightly</download-publish-path>
@@ -251,25 +251,12 @@
     <module>org.eclipse.egit.core</module>
     <module>org.eclipse.egit.ui</module>
 
-    <module>org.eclipse.egit.mylyn.ui</module>
-    <module>org.eclipse.egit.mylyn-feature</module>
-
-    <module>org.eclipse.egit.doc</module>
     <module>org.eclipse.egit-feature</module>
 
-    <module>org.eclipse.egit.gitflow-feature</module>
-	<module>org.eclipse.egit.gitflow</module>
-	<module>org.eclipse.egit.gitflow.ui</module>
-    <module>org.eclipse.egit.gitflow.test</module>
+     <module>egit_featurepatch</module>
+     <module>egit_featurepatch_updatesite</module>
 
-    <module>org.eclipse.egit.source-feature</module>
 
-    <module>org.eclipse.egit.repository</module>
-
-    <module>org.eclipse.egit.core.junit</module>
-    <module>org.eclipse.egit.core.test</module>
-    <module>org.eclipse.egit.ui.test</module>
-    <module>org.eclipse.egit.mylyn.ui.test</module>
   </modules>
 
   <pluginRepositories>
@@ -293,6 +280,11 @@
       <id>eclipse.license</id>
       <layout>p2</layout>
       <url>${license-site}</url>
+    </repository>
+    <repository>
+      <id>libsodium</id>
+      <layout>p2</layout>
+      <url>file:/${basedir}/../libsodium-updatesite/</url>
     </repository>
   </repositories>
 

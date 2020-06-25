@@ -23,6 +23,7 @@
   </parent>
 
   <artifactId>org.eclipse.egit.core</artifactId>
+  <version>5.8.0.202006091008-r</version>
   <packaging>eclipse-plugin</packaging>
 
   <name>Git Team Provider (Core)</name>

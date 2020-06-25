@@ -21,29 +21,11 @@
     <version>5.8.0.202006091008-r</version>
   </parent>
 
-  <artifactId>org.eclipse.egit.ui</artifactId>
-  <packaging>eclipse-plugin</packaging>
-    <version>5.8.0.202006091008-r</version>
+  <groupId>org.eclipse.egit.feature</groupId>
+  <artifactId>egit_featurepatch</artifactId>
+  <version>6.0.0</version>
+  <packaging>eclipse-feature</packaging>
 
-  <name>Git Team Provider (UI)</name>
+  <name>Eclipse EGit Feature Patch</name>
 
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.eclipse.tycho</groupId>
-        <artifactId>tycho-source-plugin</artifactId>
-      </plugin>
-    </plugins>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>com.github.spotbugs</groupId>
-          <artifactId>spotbugs-maven-plugin</artifactId>
-          <configuration>
-            <excludeFilterFile>findBugs/FindBugsExcludeFilter.xml</excludeFilterFile>
-          </configuration>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-  </build>
 </project>

@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
+   <feature url="features/org.eclipse.egit_5.8.0.202006091008-r.jar" id="org.eclipse.egit" version="5.8.0.202006091008-r">
+      <category name="git_privacy"/>
+   </feature>
    <feature url="features/egit_featurepatch_6.0.0.jar" id="egit_featurepatch" version="6.0.0" patch="true">
       <category name="git_privacy"/>
    </feature>

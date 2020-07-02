@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/lazysodium-java_4.2.6.jar" id="lazysodium-java" version="4.2.6"/>
    <feature url="features/gitprivacy_egit_featurepatch_6.0.0.jar" id="gitprivacy_egit_featurepatch" version="6.0.0" patch="true">
-      <category name="new_category_1"/>
+      <category name="git_privacy"/>
    </feature>
-   <category-def name="new_category_1" label="New Category 1"/>
+   <category-def name="git_privacy" label="Git Privacy"/>
 </site>
